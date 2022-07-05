@@ -1,15 +1,12 @@
-import { Box, Flex, Heading, Image, Stack, Text, Wrap } from "@chakra-ui/react";
+import { Box, Flex, Heading, Image, Modal, ModalContent, ModalOverlay, Stack, Text, Wrap } from "@chakra-ui/react";
 import { Cancel } from "iconoir-react";
 import type { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import React from "react";
-import Modal from "react-modal";
 import { MarketPlaceButton } from "ui/core/marketplace-button";
 
 import type { Nft } from "../../types/nft";
 import type { Rainbow } from "../../types/rainbow";
-
-Modal.setAppElement("#__next");
 
 export interface NftPageProps {
   data: Nft;
@@ -56,7 +53,8 @@ export function NftPage({ data }: NftPageProps) {
   };
 
   return (
-    <>
+    <Modal isCentered isOpen onClose={handleClick}>
+      <ModalOverlay zIndex={1} />
       <Box
         bg="white"
         cursor="pointer"
@@ -67,42 +65,16 @@ export function NftPage({ data }: NftPageProps) {
         right="0"
         rounded="full"
         top="0"
-        zIndex={999}
+        zIndex={9999}
       >
         <Cancel height="20" strokeWidth="4" width="20" />
       </Box>
-      <Modal
-        contentLabel="Post modal"
-        isOpen
-        onRequestClose={handleClick}
-        style={{
-          content: {
-            top: "50%",
-            left: "50%",
-            right: "auto",
-            bottom: "auto",
-            transform: "translate(-50%, -50%)",
-            border: "none",
-            padding: "20px",
-            background: "none",
-            maxHeight: "100vh",
-            maxWidth: "100vw",
-          },
-          overlay: {
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-          },
-        }}
-      >
-        <Flex direction={{ base: "column", lg: "row" }} gap={6} maxW="100vw">
-          <Box boxShadow="lg" height="full" overflow="hidden" rounded="3xl" w={{ base: "80vw", md: "50vw" }}>
+      <ModalContent bg="none" boxShadow="none" css="height: -webkit-fill-available;" maxW="70vw" zIndex={2}>
+        <Flex direction={{ base: "column", lg: "row" }} gap={6} mx="auto" my="auto">
+          <Box boxShadow="lg" overflow="hidden" rounded="3xl" w={{ base: "full", xl: "30vw" }}>
             <Image alt={data.name} h="full" src={data.image_url} w="full" />
           </Box>
-          <Box w="full">
+          <Box>
             <Stack bg="white" boxShadow="xl" p="7" rounded="2xl" w="full">
               <Flex align="center" gap="1">
                 <Image
@@ -168,8 +140,8 @@ export function NftPage({ data }: NftPageProps) {
             </Stack>
           </Box>
         </Flex>
-      </Modal>
-    </>
+      </ModalContent>
+    </Modal>
   );
 }
 
