@@ -1,13 +1,72 @@
-import { Heading, Stack, Text } from "@chakra-ui/react";
+import { Box, Container, Flex, Heading, Image, Text } from "@chakra-ui/react";
+import type { GetStaticProps } from "next";
+import Link from "next/link";
 
-export default function HomePage() {
+import type { Rainbow } from "../types/rainbow";
+
+const ENDPOINT =
+  "https://rainbow.me/api/assets?network=ethereum&address=0x241654d47b37fbece8660a6c2e2893106e623a8d&cursor=start";
+
+export interface HomePageProps {
+  data: Rainbow["results"];
+}
+
+export const getStaticProps: GetStaticProps = async () => {
+  const response = await fetch(ENDPOINT);
+  const json = (await response.json()) as Rainbow;
+
+  return {
+    props: { data: json.results },
+  };
+};
+
+export default function HomePage({ data }: HomePageProps) {
   return (
-    <Stack as="section" p={4}>
-      <Heading>Hello, world!</Heading>
-      <Text>
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Non minima tempora cum corporis laudantium ipsa sint
-        accusantium eos doloribus tenetur, aut sit, voluptas libero animi tempore ab rerum consectetur iste.
-      </Text>
-    </Stack>
+    <Box>
+      <Container maxW="6xl" py="10">
+        <Heading as="h1" pb="4" size="xl">
+          Rainbow Clown
+        </Heading>
+
+        <Flex flexWrap="wrap" gap={6} justifyContent="space-around">
+          {data.map((rainbow) => {
+            return (
+              rainbow.token_id !== "0" && (
+                <Box key={rainbow.token_id}>
+                  <Link
+                    as={`/nft/${rainbow.asset_contract.address}_${rainbow.token_id}`}
+                    href="/nft/[address]"
+                    passHref
+                  >
+                    <Box
+                      _hover={{
+                        transform: "scale(1.05)",
+                        transition: "0.2s",
+                      }}
+                      boxSize={{ base: "90vw", md: "45vw", lg: "30vw", xl: "13vw" }}
+                      cursor="pointer"
+                      overflow="hidden"
+                      rounded="2xl"
+                      shadow="2xl"
+                    >
+                      <Image
+                        alt={rainbow.metadata.name ?? rainbow.token_id}
+                        h="full"
+                        objectFit="cover"
+                        src={rainbow.metadata.image_url}
+                        w="full"
+                      />
+                    </Box>
+                  </Link>
+                  <Text color="gray.400" fontSize="sm" fontWeight="bold" pl="2" pt="1">
+                    {rainbow.metadata.name ?? rainbow.token_id}
+                  </Text>
+                </Box>
+              )
+            );
+          })}
+        </Flex>
+      </Container>
+    </Box>
   );
 }
