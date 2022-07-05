@@ -1,9 +1,9 @@
 {
-  "name": "Strangestarter",
-  "description": "Lorem ipsum dolor sit amet",
-  "domain": "example.com",
+  "name": "Rainbow KW",
+  "description": "rainbow clone project",
+  "domain": "rainbow-kw.vercel.app",
   "email": "jack@strangelove.ventures",
-  "url": "https://example.com",
+  "url": "https://rainbow-kw.vercel.app/",
   "twitter": {
     "username": "@strangelovefund"
   }
