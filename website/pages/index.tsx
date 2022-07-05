@@ -1,6 +1,7 @@
-import { Box, Container, Flex, Heading, Image, Text } from "@chakra-ui/react";
+import { Box, Container, Heading, Image, Text } from "@chakra-ui/react";
 import type { GetStaticProps } from "next";
 import Link from "next/link";
+import { GalleryLayout } from "ui/layout";
 
 import type { Rainbow } from "../types/rainbow";
 
@@ -32,7 +33,7 @@ export default function HomePage({ data }: HomePageProps) {
           Rainbow Clown
         </Heading>
 
-        <Flex flexWrap="wrap" gap={6} justifyContent="space-around">
+        <GalleryLayout>
           {data.map((rainbow) => {
             return (
               <Box key={rainbow.token_id}>
@@ -42,16 +43,22 @@ export default function HomePage({ data }: HomePageProps) {
                       transform: "scale(1.05)",
                       transition: "0.2s",
                     }}
-                    boxSize={{ base: "90vw", md: "45vw", lg: "30vw", xl: "13vw" }}
                     cursor="pointer"
+                    display="block"
+                    h="0"
                     overflow="hidden"
+                    paddingBottom="100%"
+                    position="relative"
                     rounded="2xl"
                     shadow="2xl"
+                    w="100%"
                   >
                     <Image
                       alt={rainbow.metadata.name ?? rainbow.token_id}
                       h="full"
                       objectFit="cover"
+                      objectPosition="center"
+                      position="absolute"
                       src={rainbow.metadata.image_url}
                       w="full"
                     />
@@ -63,7 +70,7 @@ export default function HomePage({ data }: HomePageProps) {
               </Box>
             );
           })}
-        </Flex>
+        </GalleryLayout>
       </Container>
     </Box>
   );
