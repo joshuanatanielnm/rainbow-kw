@@ -1,21 +1,18 @@
-import { Box, Flex, Heading, Image, Modal, ModalContent, ModalOverlay, Stack, Text, Wrap } from "@chakra-ui/react";
+import { Box, Flex, Heading, Image, Modal, ModalContent, ModalOverlay, Stack, Text } from "@chakra-ui/react";
+import { NFT_ENDPOINT, RAINBOW_ENDPOINT } from "constants/endpoint";
 import { Cancel } from "iconoir-react";
 import type { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import React from "react";
-import { MarketPlaceButton } from "ui/core/marketplace-button";
-
-import type { Nft } from "../../types/nft";
-import type { Rainbow } from "../../types/rainbow";
+import type { Nft } from "types/nft";
+import type { Rainbow } from "types/rainbow";
+import { MarketplaceLinks } from "ui/gallery/marketplace-links";
+import { NftAddress } from "ui/parts/nft-addres";
+import { NftDescription } from "ui/parts/nft-description";
 
 export interface NftPageProps {
   data: Nft;
 }
-
-const RAINBOW_ENDPOINT =
-  "https://rainbow.me/api/assets?network=ethereum&address=0x241654d47b37fbece8660a6c2e2893106e623a8d&cursor=start";
-
-const NFT_ENDPOINT = "https://rainbow.me/api/asset?uniqueId=ethereum_";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const response = await fetch(RAINBOW_ENDPOINT);
@@ -47,9 +44,7 @@ export function NftPage({ data }: NftPageProps) {
   const router = useRouter();
 
   const handleClick = () => {
-    void (async () => {
-      await router.push("/");
-    })();
+    void router.push("/");
   };
 
   return (
@@ -58,87 +53,46 @@ export function NftPage({ data }: NftPageProps) {
       <Box
         bg="white"
         cursor="pointer"
-        m="6"
+        m={6}
         onClick={handleClick}
-        p="2"
+        p={2}
         position="absolute"
-        right="0"
+        right={0}
         rounded="full"
-        top="0"
+        top={0}
         zIndex={9999}
       >
-        <Cancel height="20" strokeWidth="4" width="20" />
+        <Cancel height={20} strokeWidth={4} width={20} />
       </Box>
       <ModalContent bg="none" boxShadow="none" css="height: -webkit-fill-available;" maxW="70vw" zIndex={2}>
-        <Flex direction={{ base: "column", lg: "row" }} gap={6} mx="auto" my="auto">
+        {/* bisa pake <Stack direction={{ base: "column", lg: "row" }} /> */}
+        <Flex direction={{ base: "column", lg: "row" }} gap={6} m="auto">
           <Box boxShadow="lg" overflow="hidden" rounded="3xl" w={{ base: "full", xl: "30vw" }}>
             <Image alt={data.name} h="full" src={data.image_url} w="full" />
           </Box>
-          <Box>
-            <Stack bg="white" boxShadow="xl" p="7" rounded="2xl" w="full">
-              <Flex align="center" gap="1">
-                <Image
-                  alt={data.asset_contract.name}
-                  boxShadow="lg"
-                  boxSize="20px"
-                  rounded="full"
-                  src={data.asset_contract.image_url}
-                />
-                <Text color="gray.400" fontWeight="medium">
-                  {data.asset_contract.name}
-                </Text>
-              </Flex>
-              <Heading as="h1" fontSize="2xl">
-                {data.name}
-              </Heading>
-              <Flex flexWrap="wrap" gap="2">
-                <MarketPlaceButton
-                  link={`https://opensea.io/assets/ethereum/${data.asset_contract.address}/${data.token_id}`}
-                  src="/assets/opensea.png"
-                  title="OpenSea"
-                />
-                <MarketPlaceButton
-                  link={`https://rarible.com/token/${data.asset_contract.address}:${data.token_id}?tab=details`}
-                  src="/assets/rarible.png"
-                  title="Rarible"
-                />
-                <MarketPlaceButton
-                  link={`https://etherscan.io/token/${data.asset_contract.address}?a=${data.token_id}`}
-                  src="/assets/etherscan.png"
-                  title="Etherscan"
-                />
-              </Flex>
 
-              {data.description && (
-                <>
-                  <Text fontSize="xl" fontWeight="bold" pt="8">
-                    Description
-                  </Text>
-                  <Text color="gray.400">{data.description}</Text>
-                </>
-              )}
+          <Stack bg="white" boxShadow="xl" p={7} rounded="2xl" w="full">
+            <Flex align="center" gap="1">
+              <Image
+                alt={data.asset_contract.name}
+                boxShadow="lg"
+                boxSize="20px"
+                rounded="full"
+                src={data.asset_contract.image_url}
+              />
+              <Text color="gray.400" fontWeight="medium">
+                {data.asset_contract.name}
+              </Text>
+            </Flex>
+            <Heading as="h1" fontSize="2xl">
+              {data.name}
+            </Heading>
+            <MarketplaceLinks data={data} />
 
-              {data.traits.length > 0 && (
-                <>
-                  <Text fontSize="xl" fontWeight="bold" pt="10">
-                    Attributes
-                  </Text>
-                  <Wrap>
-                    {data.traits.map((trait) => (
-                      <Box key={trait.display_type} bg="gray.100" borderRadius="xl" color="gray.400" px="3" py="2">
-                        <Text fontSize="xs" fontWeight="bold">
-                          {trait.trait_type}
-                        </Text>
-                        <Text fontSize="md" mt="-1">
-                          {trait.value}
-                        </Text>
-                      </Box>
-                    ))}
-                  </Wrap>
-                </>
-              )}
-            </Stack>
-          </Box>
+            {data.description && <NftDescription description={data.description} />}
+
+            {data.traits.length > 0 && <NftAddress traits={data.traits} />}
+          </Stack>
         </Flex>
       </ModalContent>
     </Modal>
