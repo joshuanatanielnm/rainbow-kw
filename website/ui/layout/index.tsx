@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Grid } from "@chakra-ui/react";
 import Head from "next/head";
 import type { ReactNode } from "react";
 import { MetaTags } from "ui/seo/meta-tags";
@@ -16,5 +16,16 @@ export function Layout({ children }: LayoutProps) {
       <MetaTags />
       {children}
     </Box>
+  );
+}
+
+export function GalleryLayout({ children }: LayoutProps) {
+  return (
+    <Grid
+      gap={6}
+      templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)", lg: "repeat(3, 1fr)", xl: "repeat(4, 1fr)" }}
+    >
+      {children}
+    </Grid>
   );
 }
