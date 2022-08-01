@@ -1,4 +1,4 @@
-import { HStack } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import type { Nft } from "types/nft";
 import { MarketPlaceButton } from "ui/core/marketplace-button";
 
@@ -8,7 +8,7 @@ export interface MarketplaceLinksProps {
 
 export function MarketplaceLinks({ data }: MarketplaceLinksProps) {
   return (
-    <HStack>
+    <Flex flexWrap="wrap" gap={2}>
       <MarketPlaceButton
         link={`https://opensea.io/assets/ethereum/${data.asset_contract.address}/${data.token_id}`}
         src="/assets/opensea.png"
@@ -24,6 +24,6 @@ export function MarketplaceLinks({ data }: MarketplaceLinksProps) {
         src="/assets/etherscan.png"
         title="Etherscan"
       />
-    </HStack>
+    </Flex>
   );
 }

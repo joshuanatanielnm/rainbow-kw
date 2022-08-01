@@ -10,7 +10,7 @@ interface NftAddressProps {
 export function NftAddress({ traits }: NftAddressProps) {
   return (
     <>
-      <Text fontSize="xl" fontWeight="bold" pt="10">
+      <Text fontSize="xl" fontWeight="bold" pt={10}>
         Attributes
       </Text>
       <Wrap>

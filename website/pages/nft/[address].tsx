@@ -64,36 +64,44 @@ export function NftPage({ data }: NftPageProps) {
       >
         <Cancel height={20} strokeWidth={4} width={20} />
       </Box>
-      <ModalContent bg="none" boxShadow="none" css="height: -webkit-fill-available;" maxW="70vw" zIndex={2}>
-        {/* bisa pake <Stack direction={{ base: "column", lg: "row" }} /> */}
-        <Flex direction={{ base: "column", lg: "row" }} gap={6} m="auto">
-          <Box boxShadow="lg" overflow="hidden" rounded="3xl" w={{ base: "full", xl: "30vw" }}>
-            <Image alt={data.name} h="full" src={data.image_url} w="full" />
+      <ModalContent
+        bg="none"
+        boxShadow="none"
+        css="height: -webkit-fill-available;"
+        maxW={{ base: "90vw", md: "70vw" }}
+        zIndex={2}
+      >
+        <Stack direction={{ base: "column", lg: "row" }} gap={6} m="auto">
+          <Box>
+            <Box boxShadow="lg" overflow="hidden" rounded="3xl" w={{ base: "full", xl: "30vw" }}>
+              <Image alt={data.name} src={data.image_url} w="full" />
+            </Box>
           </Box>
+          <Box>
+            <Stack bg="white" boxShadow="xl" p={7} rounded="2xl" w="full">
+              <Flex align="center" gap="1">
+                <Image
+                  alt={data.asset_contract.name}
+                  boxShadow="lg"
+                  boxSize="20px"
+                  rounded="full"
+                  src={data.asset_contract.image_url}
+                />
+                <Text color="gray.400" fontWeight="medium">
+                  {data.asset_contract.name}
+                </Text>
+              </Flex>
+              <Heading as="h1" fontSize="2xl">
+                {data.name}
+              </Heading>
+              <MarketplaceLinks data={data} />
 
-          <Stack bg="white" boxShadow="xl" p={7} rounded="2xl" w="full">
-            <Flex align="center" gap="1">
-              <Image
-                alt={data.asset_contract.name}
-                boxShadow="lg"
-                boxSize="20px"
-                rounded="full"
-                src={data.asset_contract.image_url}
-              />
-              <Text color="gray.400" fontWeight="medium">
-                {data.asset_contract.name}
-              </Text>
-            </Flex>
-            <Heading as="h1" fontSize="2xl">
-              {data.name}
-            </Heading>
-            <MarketplaceLinks data={data} />
+              {data.description && <NftDescription description={data.description} />}
 
-            {data.description && <NftDescription description={data.description} />}
-
-            {data.traits.length > 0 && <NftAddress traits={data.traits} />}
-          </Stack>
-        </Flex>
+              {data.traits.length > 0 && <NftAddress traits={data.traits} />}
+            </Stack>
+          </Box>
+        </Stack>
       </ModalContent>
     </Modal>
   );

@@ -12,11 +12,11 @@ interface Badges {
 
 export function Badges({ trait }: Badges) {
   return (
-    <Box bg="gray.100" borderRadius="xl" color="gray.400" /* number */ px="3" py="2">
+    <Box bg="gray.100" borderRadius="xl" color="gray.400" px={3} py={2}>
       <Text fontSize="xs" fontWeight="bold">
         {trait.trait_type}
       </Text>
-      <Text fontSize="md" /* number */ mt="-1">
+      <Text fontSize="md" mt={-1}>
         {trait.value}
       </Text>
     </Box>
